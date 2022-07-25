@@ -17,9 +17,13 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public enum RespBeanEnum {
 
-    //通用
+    //General
     SUCCESS(200, "SUCCESS"),
-    ERROR(500, "服务端异常");
+    ERROR(500, "服务端异常"),
+
+    //Sign-in module
+    LOGIN_ERROR(500210,"username or password incorrect!"),
+    MOBILE_ERROR(500211,"mobile format is incorrect!") ;
     private final Integer code;
     private final String message;
 
