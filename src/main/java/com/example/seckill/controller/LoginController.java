@@ -19,7 +19,7 @@ public class LoginController {
     /**
      * redirecting sign-in page
      * */
-    @RequestMapping("toLogin")
+    @RequestMapping("/toLogin")
     public String toLogin(){
         return "login";
     }
@@ -29,7 +29,7 @@ public class LoginController {
      * @param loginVo
      * @return
      */
-    @RequestMapping("doLogin")
+    @RequestMapping("/doLogin")
     @ResponseBody
     public RespBean doLogin(LoginVo loginVo) {
         return userService.doLogin(loginVo);

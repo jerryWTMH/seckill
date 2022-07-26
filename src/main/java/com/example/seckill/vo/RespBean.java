@@ -21,7 +21,7 @@ public class RespBean {
     }
 
     public static RespBean success(Object obj){
-        return new RespBean(RespBeanEnum.SUCCESS.getCode(), RespBean.success().getMessage(), obj);
+        return new RespBean(RespBeanEnum.SUCCESS.getCode(), RespBeanEnum.SUCCESS.getMessage(), obj);
     }
 
     /**

@@ -39,7 +39,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         if(user == null){
             return RespBean.error(RespBeanEnum.LOGIN_ERROR);
         }
-        if(Md5Util.formPassToDBPass(password, user.getSalt()).equals(user.getPassword())){
+        if(!Md5Util.formPassToDBPass(password, user.getSalt()).equals(user.getPassword())){
             return RespBean.error(RespBeanEnum.LOGIN_ERROR);
         }
         return RespBean.success();
