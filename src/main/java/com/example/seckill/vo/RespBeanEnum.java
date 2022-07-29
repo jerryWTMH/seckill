@@ -23,7 +23,8 @@ public enum RespBeanEnum {
 
     //Sign-in module
     LOGIN_ERROR(500210,"username or password incorrect!"),
-    MOBILE_ERROR(500211,"mobile format is incorrect!") ;
+    MOBILE_ERROR(500211,"mobile format is incorrect!") ,
+    BIND_ERROR(500212, "error for parameters validation");
     private final Integer code;
     private final String message;
 
