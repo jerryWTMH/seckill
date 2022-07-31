@@ -23,7 +23,26 @@ spring:
       connection-timeout: 3000
       # testing whether connection can use query
       connection-test-query: SELECT 1
-
+  # redis setting
+  redis:
+    # server address
+    host: 127.0.0.1
+    # port
+    port: 6379
+    # database
+    database: 0
+    # timeout
+    timeout: 10000ms
+    lettuce:
+      pool:
+        # default 8
+        max-active: 8
+        # default -1
+        max-wait: 1000ms
+        # default 8
+        max-idle: 200
+        # default 0
+        min-idle: 5
 #mybatis-plus
 mybatis-plus:
   mapper-locations: classpath*:/mapper/*Mapper.xml
