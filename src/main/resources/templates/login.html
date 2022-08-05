@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>登录</title>
+    <title>Login</title>
     <!-- jquery -->
     <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
     <!-- bootstrap -->
@@ -22,13 +22,13 @@
 <body>
 <form name="loginForm" id="loginForm" method="post" style="width:50%; margin:0 auto">
 
-    <h2 style="text-align:center; margin-bottom: 20px">用户登录</h2>
+    <h2 style="text-align:center; margin-bottom: 20px">User Login</h2>
 
     <div class="form-group">
         <div class="row">
-            <label class="form-label col-md-4">请输入手机号码</label>
+            <label class="form-label col-md-4">Mobile Number</label>
             <div class="col-md-5">
-                <input id="mobile" name="mobile" class="form-control" type="text" placeholder="手机号码" required="true"
+                <input id="mobile" name="mobile" class="form-control" type="text" placeholder="Mobile Number" required="true"
                 />
                 <!--             取消位数限制          minlength="11" maxlength="11"-->
             </div>
@@ -39,9 +39,9 @@
 
     <div class="form-group">
         <div class="row">
-            <label class="form-label col-md-4">请输入密码</label>
+            <label class="form-label col-md-4">Password</label>
             <div class="col-md-5">
-                <input id="password" name="password" class="form-control" type="password" placeholder="密码"
+                <input id="password" name="password" class="form-control" type="password" placeholder="Password"
                        required="true"
                 />
                 <!--             取消位数限制            minlength="6" maxlength="16"-->
@@ -51,10 +51,10 @@
 
     <div class="row">
         <div class="col-md-5">
-            <button class="btn btn-primary btn-block" type="reset" onclick="reset()">重置</button>
+            <button class="btn btn-primary btn-block" type="reset" onclick="reset()">Reset</button>
         </div>
         <div class="col-md-5">
-            <button class="btn btn-primary btn-block" type="submit" onclick="login()">登录</button>
+            <button class="btn btn-primary btn-block" type="submit" onclick="login()">Login</button>
         </div>
     </div>
 </form>
@@ -86,7 +86,7 @@
             success: function (data) {
                 layer.closeAll();
                 if (data.code == 200) {
-                    layer.msg("成功");
+                    layer.msg("Success");
                     window.location.href="/goods/toList"
                 } else {
                     layer.msg(data.message);

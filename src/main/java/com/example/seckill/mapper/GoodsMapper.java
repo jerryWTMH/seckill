@@ -19,4 +19,10 @@ public interface GoodsMapper extends BaseMapper<Goods> {
      * @return
      */
     List<GoodsVo> findGoodsVo();
+
+    /**
+     * Get product detail
+     * @return
+     */
+    GoodsVo findGoodsVoByGoodsId(Long goodsId);
 }
