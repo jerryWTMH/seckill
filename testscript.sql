@@ -40,3 +40,25 @@ CREATE TABLE `t_order` (
    `pay_date` datetime DEFAULT NULL  COMMENT 'Pay Time',
    PRIMARY KEY(`id`)
 )ENGINE = INNODB AUTO_INCREMENT=12 DEFAULT CHARSET = utf8mb4;
+
+CREATE TABLE `t_seckill_goods`(
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Seckill Product ID',
+  `goods_id` BIGINT(20) NOT NULL COMMENT 'Product ID',
+  `seckill_price` DECIMAL(10,2) NOT NULL COMMENT 'Seckill Price',
+  `stock_count` INT(10) NOT NULL  COMMENT 'The Number in stock',
+  `start_date` datetime NOT NULL  COMMENT 'Seckill Start Time',
+  `end_date` datetime NOT NULL COMMENT 'Seckill End Time',
+  PRIMARY KEY(`id`)
+)ENGINE = INNODB AUTO_INCREMENT=3 DEFAULT CHARSET = utf8mb4;
+
+CREATE TABLE `t_seckill_order` (
+   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'Seckill Order ID',
+   `user_id` BIGINT(20) NOT NULL  COMMENT 'User ID',
+   `order_id` BIGINT(20) NOT NULL  COMMENT 'Order ID',
+   `goods_id` BIGINT(20) NOT NULL  COMMENT 'Product ID',
+   PRIMARY KEY(`id`)
+)ENGINE = INNODB AUTO_INCREMENT=3 DEFAULT CHARSET = utf8mb4;
+
+INSERT INTO `t_goods` VALUES(1, 'iPhone13', 'iPhone13 128GB', '/img/Apple_iPhone13.jpg', 'iPhone13 128 GB Pink Color', '999.99', 100),(2, 'iPhone 13 Pro', 'iPhone13 Pro 256GB', '/img/Apple_iPhone13_Pro.jpg', 'iPhone13 256 GB Multiple Colors', '1299.99', 50);
+
+INSERT INTO `t_seckill_goods` VALUES(1, 1,'599.99', 20, '2021-12-25 08:00:00', '2021-12-25 09:00:00'), (2, 2,'899.99', 10, '2021-12-25 08:00:00', '2021-12-25 09:00:00');
