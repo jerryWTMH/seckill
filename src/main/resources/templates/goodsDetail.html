@@ -32,7 +32,14 @@
     </tr>
     <tr>
       <td>秒杀开始时间</td>
-
+      <td th:text="${#dates.format(goods.startDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+      <td id="seckillTip">
+        <input type="hidden" id="remainSeconds" th:value="${remainSeconds}">
+        <span th:if="${secKillStatus eq 0}">Count Down: <span id="countDown" th:text="${remainSeconds}"></span> seconds
+                </span>
+        <span th:if="${secKillStatus eq 1}">Activity start!</span>
+        <span th:if="${secKillStatus eq 2}">Activity end!</span>
+      </td>
     </tr>
     <tr>
       <td>商品原价</td>
@@ -50,6 +57,27 @@
 </div>
 </body>
 <script>
+  $(function (){
+    countDown();
+  });
 
+  function countDown(){
+    var remainSeconds = $("#remainSeconds").val();
+    var timeout;
+    if(remainSeconds > 0){
+      timeout = setTimeout(function (){
+        $("#countDown").text(remainSeconds - 1);
+        $("#remainSeconds").val(remainSeconds - 1);
+        countDown();
+      }, 1000);
+    } else if(remainSeconds == 0){
+      if(timeout){
+        clearTimeout(timeout);
+      }
+      $("#seckillTip").html("Activity start!")
+    } else{
+      $("#seckillTip").html("Activity end!");
+    }
+  };
 </script>
 </html>
