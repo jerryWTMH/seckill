@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>商品详情</title>
+  <title>Product Detail</title>
   <!-- jquery -->
   <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
   <!-- bootstrap -->
@@ -16,22 +16,22 @@
 </head>
 <body>
 <div class="panel panel-default">
-  <div class="panel-heading">秒杀商品详情</div>
+  <div class="panel-heading">Discount Product Detail</div>
   <div class="panel-body">
-    <span th:if="${user eq null}"> 您还没有登录，请登陆后再操作<br/></span>
-    <span>没有收货地址的提示。。。</span>
+    <span th:if="${user eq null}"> You haven't login, please login first<br/></span>
+    <span>No receiving address。。。</span>
   </div>
   <table class="table" id="goods">
     <tr>
-      <td>商品名称</td>
+      <td>Product Name</td>
       <td colspan="3" th:text="${goods.goodsName}"></td>
     </tr>
     <tr>
-      <td>商品图片</td>
+      <td>Product Image</td>
       <td colspan="3"><img th:src="@{${goods.goodsImg}}" width="200" height="200"/></td>
     </tr>
     <tr>
-      <td>秒杀开始时间</td>
+      <td>Discount Activity start time</td>
       <td th:text="${#dates.format(goods.startDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
       <td id="seckillTip">
         <input type="hidden" id="remainSeconds" th:value="${remainSeconds}">
@@ -40,17 +40,23 @@
         <span th:if="${secKillStatus eq 1}">Activity start!</span>
         <span th:if="${secKillStatus eq 2}">Activity end!</span>
       </td>
+      <td>
+        <form id="secKillForm" action="/seckill/doSeckill">
+          <input type="hidden" name="goodsId" th:value="${goods.id}">
+          <button class="btn btn-primary btn-block" type="submit" id="buyButton">Buy it!</button>
+        </form>
+      </td>
     </tr>
     <tr>
-      <td>商品原价</td>
+      <td>Original Price</td>
       <td colspan="3" th:text="${goods.goodsPrice}"></td>
     </tr>
     <tr>
-      <td>秒杀价</td>
+      <td>Discount Price</td>
       <td colspan="3" th:text="${goods.seckillPrice}"></td>
     </tr>
     <tr>
-      <td>库存数量</td>
+      <td>Number In Stock</td>
       <td colspan="3" th:text="${goods.stockCount}"></td>
     </tr>
   </table>
@@ -64,18 +70,22 @@
   function countDown(){
     var remainSeconds = $("#remainSeconds").val();
     var timeout;
+    // Activity hasn't started yet
     if(remainSeconds > 0){
+      $("#buyButton").attr("disabled", true);
       timeout = setTimeout(function (){
         $("#countDown").text(remainSeconds - 1);
         $("#remainSeconds").val(remainSeconds - 1);
         countDown();
       }, 1000);
-    } else if(remainSeconds == 0){
+    } else if(remainSeconds == 0){ // Activity start now
+      $("#buyButton").attr("disabled", false);
       if(timeout){
         clearTimeout(timeout);
       }
       $("#seckillTip").html("Activity start!")
     } else{
+      $("#buyButton").attr("disabled", true);
       $("#seckillTip").html("Activity end!");
     }
   };
