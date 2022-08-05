@@ -21,10 +21,13 @@ public enum RespBeanEnum {
     SUCCESS(200, "SUCCESS"),
     ERROR(500, "服务端异常"),
 
-    //Sign-in module
+    //Sign-in module 5002
     LOGIN_ERROR(500210,"username or password incorrect!"),
     MOBILE_ERROR(500211,"mobile format is incorrect!") ,
-    BIND_ERROR(500212, "error for parameters validation");
+    BIND_ERROR(500212, "error for parameters validation"),
+    //Seckill module 5005
+    EMPTY_STOCK(500500, "inventory shortage"),
+    REPEATE_ERROR(500501, "can only buy one for each item");
     private final Integer code;
     private final String message;
 
