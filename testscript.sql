@@ -62,3 +62,17 @@ CREATE TABLE `t_seckill_order` (
 INSERT INTO `t_goods` VALUES(1, 'iPhone13', 'iPhone13 128GB', '/img/Apple_iPhone13.jpg', 'iPhone13 128 GB Pink Color', '999.99', 100),(2, 'iPhone 13 Pro', 'iPhone13 Pro 256GB', '/img/Apple_iPhone13_Pro.jpg', 'iPhone13 256 GB Multiple Colors', '1299.99', 50);
 
 INSERT INTO `t_seckill_goods` VALUES(1, 1,'599.99', 20, '2021-12-25 08:00:00', '2021-12-25 09:00:00'), (2, 2,'899.99', 10, '2021-12-25 08:00:00', '2021-12-25 09:00:00');
+
+SELECT
+    g.id,
+    g.goods_name,
+    g.goods_title,
+    g.goods_img,
+    g.goods_detail,
+    g.goods_price,
+    g.goods_stock,
+    sg.seckill_price,
+    sg.stock_count,
+    sg.start_date,
+    sg.end_date
+    FROM t_goods g LEFT JOIN t_seckill_goods AS sg ON g.id = sg.goods_id;
