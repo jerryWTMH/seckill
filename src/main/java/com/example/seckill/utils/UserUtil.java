@@ -21,7 +21,7 @@ public class UserUtil {
         List<User> users = new ArrayList<>(count);
         for(int i = 0 ; i < count; i++){
             User user = new User();
-            user.setId(1300000000L + i);
+            user.setId(13000000000L + i);
             user.setNickname("user" + i);
             user.setSalt("1a2b3c");
             user.setPassword(Md5Util.inputPassToDBPass("123456", user.getSalt()));

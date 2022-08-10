@@ -25,6 +25,8 @@ public class SecKillController {
     private IOrderService orderService;
     /**
      * Seckill
+     * Mac QPS:3956
+     * Linux QPS:1324
      * @param model
      * @param user
      * @param goodsId
