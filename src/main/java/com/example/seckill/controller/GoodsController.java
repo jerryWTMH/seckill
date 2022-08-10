@@ -26,8 +26,8 @@ public class GoodsController {
     private IGoodsService goodService;
     /**
      * Redirect to the page of goods
-     * Mac QPS:5488 (before optimization)
-     * Linux QPS: 937 (before optimization)
+     * Mac QPS:5488 (before optimization!)
+     * Linux QPS: 937 (before optimization!)
      * @param model
      * @return
      */
