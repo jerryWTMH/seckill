@@ -2,15 +2,19 @@ package com.example.seckill.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.seckill.exception.GlobalException;
 import com.example.seckill.mapper.OrderMapper;
 import com.example.seckill.pojo.Order;
 import com.example.seckill.pojo.SeckillGoods;
 import com.example.seckill.pojo.SeckillOrder;
 import com.example.seckill.pojo.User;
+import com.example.seckill.service.IGoodsService;
 import com.example.seckill.service.IOrderService;
 import com.example.seckill.service.ISeckillGoodsService;
 import com.example.seckill.service.ISeckillOrderService;
 import com.example.seckill.vo.GoodsVo;
+import com.example.seckill.vo.OrderDetailVo;
+import com.example.seckill.vo.RespBeanEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +35,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     private OrderMapper orderMapper;
     @Autowired
     private ISeckillOrderService seckillOrderService;
+    @Autowired
+    private IGoodsService goodsService;
     /**
      * Seckill
      * @param user
@@ -62,5 +68,24 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         seckillOrder.setGoodsId(goods.getId());
         seckillOrderService.save(seckillOrder);
         return order;
+    }
+
+    /**
+     * Order Detail
+     * @param orderId
+     * @return
+     */
+    @Override
+    public OrderDetailVo detail(Long orderId) {
+        if(orderId == null){
+            throw new GlobalException(RespBeanEnum.ORDER_NOT_EXIST);
+        }
+        Order order = orderMapper.selectById(orderId);
+        goodsService.findGoodsVoByGoodsId(order.getGoodsId());
+        GoodsVo goodsVo = goodsService.findGoodsVoByGoodsId(order.getGoodsId());
+        OrderDetailVo detail = new OrderDetailVo();
+        detail.setOrder(order);
+        detail.setGoodsVo(goodsVo);
+        return detail;
     }
 }

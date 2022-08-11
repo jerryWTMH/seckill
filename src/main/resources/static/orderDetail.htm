@@ -56,6 +56,63 @@
         </tr>
     </table>
 </div>
+<script>
+    $ (function(){
+        getOrderDetail();
+    })
 
+    function getOrderDetail(){
+        var orderId = g_getQueryString("orderId");
+        $.ajax({
+            url:'/order/detail',
+            type:'GET',
+            data:{
+                orderId: orderId
+            },
+            success: function(data){
+                if(data.code == 200){
+                    render(data.obj);
+                }else{
+                    layer.msg(data.message);
+                }
+            },
+            error: function(){
+                layer.msg("Custom request fail");
+            }
+        })
+    }
+
+    function render(detail){
+        var goods= detail.goodsVo;
+        var order = detail.order;
+        $("#goodsName").text(goods.goodsName);
+        $("#goodsImg").attr("src", goods.goodsImg);
+        $("#goodsPrice").text(order.goodsPrice);
+        $("#createDate").text(new Date(order.createDate).format("yyyy-MM-dd HH:mm:ss"));
+        var status = order.status;
+        var statusText = "";
+        switch(status){
+            case 0:
+                statusText="Haven't paid";
+                break;
+            case 1:
+                statusText="Prepared to deliver package";
+                break;
+            case 2:
+                statusText="Have delivered package";
+                break;
+            case 3:
+                statusText="Haven received package";
+                break;
+            case 4:
+                statusText="Have refunded";
+                break;
+            case 5:
+                statusText="Have completed";
+                break;
+        }
+        $("#status").text(statusText);
+    }
+</script>
 </body>
 </html>
