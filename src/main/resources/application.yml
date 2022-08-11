@@ -62,6 +62,43 @@ spring:
         max-idle: 200
         # default 0
         min-idle: 5
+  #RabbitMQ
+  rabbitmq:
+    #Server
+    host: 127.0.0.1
+    #Host Name
+    username: guest
+    #Password
+    password: guest
+    #Virtual Host
+    virtual-host: /
+    #Port
+    port: 5672
+    listener:
+      simple:
+        #Consumer mini number
+        concurrency: 10
+        #Consumer max number
+        max-concurrency: 10
+        #Restrict Consumer can only process messages one by one
+        prefetch: 1
+        #auto startup
+        auto-startup: true
+        #Requeue when got rejected
+        default-requeue-rejected: true
+    template:
+      retry:
+        #Retry，default is false
+        enabled: true
+        #Retry time，default is 1000ms
+        initial-interval: 1000ms
+        #Max retry times，default is 3
+        max-attempts: 3
+        #Max retry interval
+        max-interval: 10000ms
+        #Retry multiplier
+        multiplier: 1
+
 #mybatis-plus
 mybatis-plus:
   mapper-locations: classpath*:/mapper/*Mapper.xml
