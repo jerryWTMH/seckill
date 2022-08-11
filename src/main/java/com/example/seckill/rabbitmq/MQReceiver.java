@@ -15,4 +15,14 @@ public class MQReceiver {
         log.info("receive message" + msg);
     }
 
+    @RabbitListener(queues="queue_fanout01")
+    public void receive01(Object msg){
+        log.info("QUEUE01 receive message: " + msg);
+    }
+
+    @RabbitListener(queues="queue_fanout02")
+    public void receive02(Object msg){
+        log.info("QUEUE02 receive message: " + msg);
+    }
+
 }
