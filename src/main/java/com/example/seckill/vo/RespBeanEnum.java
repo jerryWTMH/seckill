@@ -25,6 +25,8 @@ public enum RespBeanEnum {
     LOGIN_ERROR(500210,"username or password incorrect!"),
     MOBILE_ERROR(500211,"mobile format is incorrect!") ,
     BIND_ERROR(500212, "error for parameters validation"),
+    MOBILE_NOT_EXIST(500213, "phone number doesn't exist"),
+    PASSWORD_UPDATE_FAIL(500214, "update password fail"),
     //Seckill module 5005
     EMPTY_STOCK(500500, "inventory shortage"),
     REPEATE_ERROR(500501, "can only buy one for each item");

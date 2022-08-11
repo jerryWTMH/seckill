@@ -37,7 +37,7 @@ public class GoodsController {
     /**
      * Redirect to the page of goods
      * Mac QPS:5488 (before optimization!)
-     * Linux QPS: 937 (before optimization!)
+     * Mac QPS: 10445 (038 Caching HTMLRedis)
      * @param model
      * @return
      */
