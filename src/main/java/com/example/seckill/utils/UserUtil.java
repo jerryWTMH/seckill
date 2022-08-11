@@ -29,26 +29,26 @@ public class UserUtil {
             user.setRegisterDate(new Date());
             users.add(user);
         }
-        System.out.println("create user");
-        // insert database
-        Connection conn = getConn();
-        String sql = "insert into t_user(login_count,nickname,register_date,salt,password,id) values(?,?,?,?,?,?)";
-        conn.prepareStatement(sql);
-        PreparedStatement pstmt = conn.prepareStatement(sql);
-        for(int i = 0; i < users.size(); i++){
-            User user = users.get(i);
-            pstmt.setInt(1, user.getLoginCount());
-            pstmt.setString(2, user.getNickname());
-            pstmt.setTimestamp(3, new Timestamp(user.getRegisterDate().getTime()));
-            pstmt.setString(4, user.getSalt());
-            pstmt.setString(5, user.getPassword());
-            pstmt.setLong(6, user.getId());
-            pstmt.addBatch();
-        }
-        pstmt.executeBatch();
-        pstmt.clearParameters();
-        conn.close();
-        System.out.println("insert to db");
+//        System.out.println("create user");
+//        // insert database
+//        Connection conn = getConn();
+//        String sql = "insert into t_user(login_count,nickname,register_date,salt,password,id) values(?,?,?,?,?,?)";
+//        conn.prepareStatement(sql);
+//        PreparedStatement pstmt = conn.prepareStatement(sql);
+//        for(int i = 0; i < users.size(); i++){
+//            User user = users.get(i);
+//            pstmt.setInt(1, user.getLoginCount());
+//            pstmt.setString(2, user.getNickname());
+//            pstmt.setTimestamp(3, new Timestamp(user.getRegisterDate().getTime()));
+//            pstmt.setString(4, user.getSalt());
+//            pstmt.setString(5, user.getPassword());
+//            pstmt.setLong(6, user.getId());
+//            pstmt.addBatch();
+//        }
+//        pstmt.executeBatch();
+//        pstmt.clearParameters();
+//        conn.close();
+//        System.out.println("insert to db");
         // login, generate UserTicket
         String urlString = "http://localhost:8080/login/doLogin";
         File file = new File("/Users/jerry/IdeaProjects/seckill-demo/config.txt");
@@ -92,7 +92,7 @@ public class UserUtil {
     }
 
     private static Connection getConn() throws Exception {
-        String url = "jdbc:mysql://127.0.0.1:3306/seckill?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai";
+        String url = "jdbc:mysql://localhost:3306/seckill?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai";
         String username = "root";
         String password = "1234";
         String driver="com.mysql.cj.jdbc.Driver";
