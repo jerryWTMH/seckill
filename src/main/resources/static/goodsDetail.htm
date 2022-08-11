@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Product Detail</title>
+  <!-- jquery -->
+  <script type="text/javascript" src="js/jquery.min.js"></script>
+  <!-- bootstrap -->
+  <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css"/>
+  <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+  <!-- layer -->
+  <script type="text/javascript" src="layer/layer.js"></script>
+  <!-- common.js -->
+  <script type="text/javascript" src="js/common.js"></script>
+</head>
+<body>
+<div class="panel panel-default">
+  <div class="panel-heading">Discount Product Detail</div>
+  <div class="panel-body">
+    <span id="userTip"> You haven't login, please login first<br/></span>
+    <span>No receiving address。。。</span>
+  </div>
+  <table class="table" id="goods">
+    <tr>
+      <td>Product Name</td>
+      <td colspan="3" id="goodsName"></td>
+    </tr>
+    <tr>
+      <td>Product Image</td>
+      <td colspan="3"><img id="goodsImg" width="200" height="200"/></td>
+    </tr>
+    <tr>
+      <td>Discount Activity start time</td>
+      <td id="startTime"></td>
+      <td>
+        <input type="hidden" id="remainSeconds">
+<!--        <span th:if="${secKillStatus eq 0}">Count Down: <span id="countDown" th:text="${remainSeconds}"></span> seconds-->
+<!--                </span>-->
+<!--        <span th:if="${secKillStatus eq 1}">Activity start!</span>-->
+<!--        <span th:if="${secKillStatus eq 2}">Activity end!</span>-->
+        <span id="seckillTip"></span>
+      </td>
+      <td>
+        <form id="secKillForm" action="/seckill/doSeckill">
+          <input type="hidden" name="goodsId" id="goods.id">
+          <button class="btn btn-primary btn-block" type="submit" id="buyButton">Buy it!</button>
+        </form>
+      </td>
+    </tr>
+    <tr>
+      <td>Original Price</td>
+      <td colspan="3" id="goods.goodPrice"></td>
+    </tr>
+    <tr>
+      <td>Discount Price</td>
+      <td colspan="3" id="goods.seckillPrice"></td>
+    </tr>
+    <tr>
+      <td>Number In Stock</td>
+      <td colspan="3" id="goods.stockCount"></td>
+    </tr>
+  </table>
+</div>
+</body>
+<script>
+  $(function (){
+    //countDown();
+    getDetails();
+  });
+
+  function getDetails(){
+    var goodsId = g_getQueryString("goodsId");
+    $.ajax({
+      url:'/toDetail/' + goodsId,
+      type:'GET',
+      success:function(data){
+        if(data.code == 200){
+          render(data.obj);
+        } else{
+          layer.msg("Custom request fail1");
+        }
+      },
+      error:function(){
+        layer.msg("Custom request fail2");
+      }
+    })
+  }
+
+  function render(detail){
+    var user = detail.user;
+    var goods = detail.goodsVo;
+    var remainSeconds = detail.remainSeconds;
+    if(user){
+      $("#userTip").hide();
+    }
+    $("#goodsName").text(goods.goodsName);
+    $("#goodsImg").attr("src", goods.goodsImg);
+    $("#startTime").text(new Date(goods.startDate).format("yyyy-MM-dd HH:mm:ss"));
+    $("#remainSeconds").val(remainSeconds);
+    $("#goodsId").val(goods.id);
+    $("#goodsPrice").text(goods.goodsPrice);
+    $("#seckillPrice").text(goods.seckillPrice);
+    $("#stockCount").text(goods.stockCount);
+    countDown();
+  }
+
+  function countDown(){
+    var remainSeconds = $("#remainSeconds").val();
+    var timeout;
+    // Activity hasn't started yet
+    if(remainSeconds > 0){
+      $("#buyButton").attr("disabled", true);
+      $("#seckillTip").html("Count Down: " + remainSeconds + "seconds");
+      timeout = setTimeout(function (){
+        //$("#countDown").text(remainSeconds - 1);
+        $("#remainSeconds").val(remainSeconds - 1);
+        countDown();
+      }, 1000);
+    } else if(remainSeconds == 0){ // Activity start now
+      $("#buyButton").attr("disabled", false);
+      if(timeout){
+        clearTimeout(timeout);
+      }
+      $("#seckillTip").html("Activity start!")
+    } else{
+      $("#buyButton").attr("disabled", true);
+      $("#seckillTip").html("Activity end!");
+    }
+  };
+</script>
+</html>

@@ -3,7 +3,9 @@ package com.example.seckill.controller;
 import com.example.seckill.pojo.User;
 import com.example.seckill.service.IGoodsService;
 import com.example.seckill.service.IUserService;
+import com.example.seckill.vo.DetailVo;
 import com.example.seckill.vo.GoodsVo;
+import com.example.seckill.vo.RespBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -67,9 +69,45 @@ public class GoodsController {
      * @param goodsId
      * @return
      */
-    @RequestMapping(value="/toDetail/{goodsId}", produces = "text/html;charset=utf-8")
+    @RequestMapping("/detail/{goodsId}")
     @ResponseBody
-    public String toDetail(Model model, User user, @PathVariable Long goodsId, HttpServletRequest request, HttpServletResponse response){
+    public RespBean toDetail(Model model, User user, @PathVariable Long goodsId){
+        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+        GoodsVo goodsVo = goodService.findGoodsVoByGoodsId(goodsId);
+        Date startDate = goodsVo.getStartDate();
+        Date endDate = goodsVo.getEndDate();
+        Date nowDate = new Date();
+        // Discount status
+        int secKillStatus = 0;
+        // Discount count down
+        int remainSeconds = 0;
+        // Discount haven't started
+        if(nowDate.before(startDate)){
+            remainSeconds = (int)(startDate.getTime() - nowDate.getTime()) / 1000;
+        } else if(nowDate.after(endDate)){
+            // Discount end
+            secKillStatus = 2;
+            remainSeconds = -1;
+        } else{
+            secKillStatus = 1;
+            remainSeconds = 0;
+        }
+        DetailVo detailVo = new DetailVo();
+        detailVo.setUser(user);
+        detailVo.setGoodsVo(goodsVo);
+        detailVo.setSeckillStatus(secKillStatus);
+        detailVo.setRemainSeconds(remainSeconds);
+        return RespBean.success(detailVo);
+    }
+
+    /**
+     * Redicrect to Detail Page
+     * @param goodsId
+     * @return
+     */
+    @RequestMapping(value="/toDetail2/{goodsId}", produces = "text/html;charset=utf-8")
+    @ResponseBody
+    public String toDetail2(Model model, User user, @PathVariable Long goodsId, HttpServletRequest request, HttpServletResponse response){
         ValueOperations valueOperations = redisTemplate.opsForValue();
         String html = (String) valueOperations.get("goodsDetail:" + goodsId);
         if(!StringUtils.isEmpty(html)){
@@ -109,3 +147,4 @@ public class GoodsController {
         return html;
     }
 }
+
