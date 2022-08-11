@@ -45,6 +45,9 @@
 <!--          <input type="hidden" name="goodsId" id="goods.id">-->
 <!--          <button class="btn btn-primary btn-block" type="submit" id="buyButton">Buy it!</button>-->
 <!--        </form>-->
+        <button class="btn btn-primary btn-block" type="button" id="buyButton" onclick="doSeckill()">Buy it!
+            <input type="hidden" name="goodsId" id="goodsId">
+        </button>
       </td>
     </tr>
     <tr>
@@ -68,6 +71,26 @@
     getDetails();
   });
 
+  function doSeckill(){
+    $.ajax({
+      url:'/seckill/doSeckill',
+      type: 'POST',
+      data:{
+        goodsId:$("#goodsId").val()
+      },
+      success:function(data){
+        if(data.code == 200){
+          window.location.href="/orderDetail.htm?orderId=" + data.obj.id;
+        }else{
+          layer.msg("Custom request fail");
+        }
+      },
+      error: function(){
+        layer.msg("Custom request fail");
+      }
+    })
+  }
+
   function getDetails(){
     var goodsId = g_getQueryString("goodsId");
     $.ajax({
@@ -77,11 +100,11 @@
         if(data.code == 200){
           render(data.obj);
         } else{
-          layer.msg("Custom request fail1");
+          layer.msg("Custom request fail");
         }
       },
       error:function(){
-        layer.msg("Custom request fail2");
+        layer.msg("Custom request fail");
       }
     })
   }

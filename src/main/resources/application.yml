@@ -1,4 +1,23 @@
 spring:
+  # Static resource process
+  resources:
+    # Activate static resouce process, default is true
+    add-mappings: true
+    cache:
+      cachecontrol:
+        # Caching response time (sec)
+        max-age: 3600
+      chain:
+        # Resource chain caching, default is true
+        cache: true
+        # Activate resource chain, default is false
+        enabled: true
+        # Activate compressing resource(gzip, brotli), default is false
+        compressed: true
+        # html5 caching, default is false
+        html-application-cache: true
+      static-locations: classpath:/static/
+
   thymeleaf:
     cache: false
   datasource:
