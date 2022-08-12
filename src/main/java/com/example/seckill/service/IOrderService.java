@@ -28,4 +28,22 @@ public interface IOrderService extends IService<Order> {
      * @return
      */
     OrderDetailVo detail(Long orderId);
+
+    /**
+     * get seckill path
+     * @param user
+     * @param goodsId
+     * @return
+     */
+    String createPath(User user, Long goodsId);
+
+    /**
+     * Check seckill path
+     *
+     * @param user
+     * @param goodsId
+     * @param path
+     * @return
+     */
+    boolean checkPath(User user, Long goodsId, String path);
 }

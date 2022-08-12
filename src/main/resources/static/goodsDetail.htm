@@ -45,7 +45,7 @@
 <!--          <input type="hidden" name="goodsId" id="goods.id">-->
 <!--          <button class="btn btn-primary btn-block" type="submit" id="buyButton">Buy it!</button>-->
 <!--        </form>-->
-        <button class="btn btn-primary btn-block" type="button" id="buyButton" onclick="doSeckill()">Buy it!
+        <button class="btn btn-primary btn-block" type="button" id="buyButton" onclick="getSeckillPath()">Buy it!
             <input type="hidden" name="goodsId" id="goodsId">
         </button>
       </td>
@@ -71,9 +71,33 @@
     getDetails();
   });
 
-  function doSeckill(){
+  function getSeckillPath() {
+      var goodsId = $("#goodsId").val();
+      var captcha = $("#captcha").val();
+      g_showLoading();
+      $.ajax({
+          url: "/seckill/path",
+          type: "GET",
+          data: {
+              goodsId: goodsId
+          },
+          success: function (data) {
+              if (data.code == 200) {
+                  var path = data.obj;
+                  doSeckill(path);
+              } else {
+                  layer.msg(data.message);
+              }
+          },
+          error: function () {
+              layer.msg("Custom request fail");
+          }
+      });
+  }
+
+  function doSeckill(path){
     $.ajax({
-      url:'/seckill/doSeckill',
+      url:'/seckill/' + path + '/doSeckill',
       type: 'POST',
       data:{
         goodsId:$("#goodsId").val()

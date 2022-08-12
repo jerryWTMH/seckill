@@ -31,6 +31,7 @@ public enum RespBeanEnum {
     //Seckill module 5005
     EMPTY_STOCK(500500, "inventory shortage"),
     REPEATE_ERROR(500501, "can only buy one for each item"),
+    REQUEST_ILLEGAL(500502, "request illegal, please retry it"),
     // Order module 5003
     ORDER_NOT_EXIST(500300, "order info doesn't exist");
     private final Integer code;

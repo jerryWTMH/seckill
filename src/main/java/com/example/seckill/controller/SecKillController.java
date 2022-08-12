@@ -21,6 +21,7 @@ import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -84,15 +85,19 @@ public class SecKillController implements InitializingBean {
      * @param goodsId
      * @return
      */
-    @RequestMapping(value = "/doSeckill", method = RequestMethod.POST)
+    @RequestMapping(value = "/{path}/doSeckill", method = RequestMethod.POST)
     @ResponseBody
-    public RespBean doSeckill(Model model, User user, Long goodsId){
+    public RespBean doSeckill(@PathVariable String path, User user, Long goodsId){
         if(user == null){
             return RespBean.error(RespBeanEnum.SESSION_ERROR);
         }
-        model.addAttribute("user",user);
         // Determine whether buy more than once
         ValueOperations valueOperations = redisTemplate.opsForValue();
+        boolean check = orderService.checkPath(user, goodsId, path);
+        if(!check){
+            return RespBean.error(RespBeanEnum.REQUEST_ILLEGAL);
+        }
+        // Determine whether buy more than once
         SeckillOrder seckillOrder = (SeckillOrder)redisTemplate.opsForValue().get("order:" + user.getId() + ":" + goodsId);
         if(seckillOrder != null){
             return RespBean.error(RespBeanEnum.REPEATE_ERROR);
@@ -145,6 +150,16 @@ public class SecKillController implements InitializingBean {
         }
         Long orderId = seckillOrderService.getResult(user, goodsId);
         return RespBean.success(orderId);
+    }
+
+    @RequestMapping(value ="/path", method = RequestMethod.GET)
+    @ResponseBody
+    public RespBean getPath(User user, Long goodsId){
+        if(user == null){
+            return RespBean.error(RespBeanEnum.SESSION_ERROR);
+        }
+        String str = orderService.createPath(user,goodsId);
+        return RespBean.success(str);
     }
 
 
