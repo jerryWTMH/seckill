@@ -72,6 +72,7 @@ public class SecKillController implements InitializingBean {
      * Seckill
      * Mac QPS:3956
      * Mac QPS: 5658 (Caching)
+     * Mac QPS: 9646 (Optimize: Redis for seckill)
      * @param model
      * @param user
      * @param goodsId
