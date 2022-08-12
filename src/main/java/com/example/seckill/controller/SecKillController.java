@@ -42,8 +42,32 @@ public class SecKillController implements InitializingBean {
 
     @Autowired
     private MQSender mqSender;
-
     private Map<Long, Boolean> EmptyStockMap = new HashMap<>();
+
+
+    @RequestMapping("/doSeckill2")
+    public String doSeckill2(Model model, User user, Long goodsId){
+        if(user == null){
+            return "login";
+        }
+        model.addAttribute("user",user);
+        GoodsVo goods =goodsService.findGoodsVoByGoodsId(goodsId);
+        if(goods.getStockCount() < 1){
+            model.addAttribute("errmsg", RespBeanEnum.EMPTY_STOCK.getMessage());
+            return "secKillFail";
+        }
+        // Determine whether buy more than once
+        // The code below is MyBatis plus
+        SeckillOrder seckillOrder = seckillOrderService.getOne(new QueryWrapper<SeckillOrder>().eq("user_id", user.getId()).eq("goods_id", goodsId));
+        if(seckillOrder != null){
+            model.addAttribute("errmsg", RespBeanEnum.REPEATE_ERROR.getMessage());
+            return "secKillFail";
+        }
+        Order order = orderService.seckill(user, goods);
+        model.addAttribute("order", order);
+        model.addAttribute("goods", goods);
+        return "orderDetail";
+    }
     /**
      * Seckill
      * Mac QPS:3956
@@ -71,7 +95,7 @@ public class SecKillController implements InitializingBean {
             return RespBean.error(RespBeanEnum.EMPTY_STOCK);
         }
         // decrease the number in stock IN ADVANCE
-        Long stock = valueOperations.decrement("seckillGoods" + goodsId); // This is atomic
+        Long stock = valueOperations.decrement("seckillGoods:" + goodsId); // This is atomic
         if(stock < 0){
             EmptyStockMap.put(goodsId, true);
             valueOperations.increment("seckillGoods:" + goodsId);
@@ -97,32 +121,24 @@ public class SecKillController implements InitializingBean {
 //        model.addAttribute("order", order);
 //        model.addAttribute("goods", goods);
 //        return RespBean.success(order);
-        return null;
     }
 
-    @RequestMapping("/doSeckill2")
-    public String doSeckill2(Model model, User user, Long goodsId){
+    /**
+     * Get result from seckill
+     * @param user
+     * @param goodsId
+     * @return orderId: sucess; -1: fail; 0: queueing
+     */
+    @RequestMapping(value="/result", method = RequestMethod.GET)
+    @ResponseBody
+    public RespBean getResult(User user, Long goodsId){
         if(user == null){
-            return "login";
+            return RespBean.error(RespBeanEnum.SESSION_ERROR);
         }
-        model.addAttribute("user",user);
-        GoodsVo goods =goodsService.findGoodsVoByGoodsId(goodsId);
-        if(goods.getStockCount() < 1){
-            model.addAttribute("errmsg", RespBeanEnum.EMPTY_STOCK.getMessage());
-            return "secKillFail";
-        }
-        // Determine whether buy more than once
-        // The code below is MyBatis plus
-        SeckillOrder seckillOrder = seckillOrderService.getOne(new QueryWrapper<SeckillOrder>().eq("user_id", user.getId()).eq("goods_id", goodsId));
-        if(seckillOrder != null){
-            model.addAttribute("errmsg", RespBeanEnum.REPEATE_ERROR.getMessage());
-            return "secKillFail";
-        }
-        Order order = orderService.seckill(user, goods);
-        model.addAttribute("order", order);
-        model.addAttribute("goods", goods);
-        return "orderDetail";
+        Long orderId = seckillOrderService.getResult(user, goodsId);
+        return RespBean.success(orderId);
     }
+
 
     /**
      * System Initialization, Load the number of product in stock to Redis

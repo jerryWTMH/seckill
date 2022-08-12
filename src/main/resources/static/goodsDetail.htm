@@ -80,15 +80,51 @@
       },
       success:function(data){
         if(data.code == 200){
-          window.location.href="/orderDetail.htm?orderId=" + data.obj.id;
+          // window.location.href="/orderDetail.htm?orderId=" + data.obj.id;
+            getResult($("#goodsId").val());
         }else{
-          layer.msg("Custom request fail");
+            console.log(data);
+          layer.msg("Custom request fail1");
         }
       },
       error: function(){
-        layer.msg("Custom request fail");
+        layer.msg("Custom request fail2");
       }
     })
+  }
+
+  function getResult(goodsId){
+      g_showLoading(); // Loading animation
+      $.ajax({
+          url:"/seckill/result",
+          type:"GET",
+          data:{
+              goodsId: goodsId,
+          },
+          success: function (data){
+              if(data.code == 200){
+                  var result = data.obj;
+                  if(result < 0){
+                      layer.msg("Sorry, you're too late to make an order");
+                  } else if(result == 0){
+                      setTimeout(function(){
+                          getResult(goodsId);
+                      }, 50);
+                  } else{
+                      layer.confirm("Congrats, you make an order successfully! Do you wanna see your order?", {btn:["Yes", "No"]},
+                      function(){
+                          window.location.href="/orderDetail.htm?orderId=" + result;
+                      },
+                      function(){
+                          layer.close();
+                      })
+                  }
+              }
+          },
+          error: function(){
+              layer.msg("Custom request error");
+          }
+      })
   }
 
   function getDetails(){
