@@ -33,6 +33,7 @@ public enum RespBeanEnum {
     REPEATE_ERROR(500501, "can only buy one for each item"),
     REQUEST_ILLEGAL(500502, "request illegal, please retry it"),
     ERROR_CAPTCHA(500503, "validation code fail, please re-enter"),
+    ACCESS_LIMIT_REAHCED(500504, "visit too much, please try it later"),
     // Order module 5003
     ORDER_NOT_EXIST(500300, "order info doesn't exist"),
     ;
