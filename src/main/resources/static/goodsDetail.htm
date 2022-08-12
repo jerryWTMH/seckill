@@ -89,7 +89,8 @@
           url: "/seckill/path",
           type: "GET",
           data: {
-              goodsId: goodsId
+              goodsId: goodsId,
+              captcha: captcha
           },
           success: function (data) {
               if (data.code == 200) {

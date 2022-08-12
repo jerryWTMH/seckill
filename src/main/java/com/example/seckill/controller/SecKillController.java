@@ -159,11 +159,21 @@ public class SecKillController implements InitializingBean {
         return RespBean.success(orderId);
     }
 
+    /**
+     * Get seckill path
+     * @param user
+     * @param goodsId
+     * @return
+     */
     @RequestMapping(value ="/path", method = RequestMethod.GET)
     @ResponseBody
-    public RespBean getPath(User user, Long goodsId){
+    public RespBean getPath(User user, Long goodsId, String captcha){
         if(user == null){
             return RespBean.error(RespBeanEnum.SESSION_ERROR);
+        }
+        boolean check = orderService.checkCaptcha(user, goodsId, captcha);
+        if(!check){
+            return RespBean.error(RespBeanEnum.ERROR_CAPTCHA);
         }
         String str = orderService.createPath(user,goodsId);
         return RespBean.success(str);
