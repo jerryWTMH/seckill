@@ -1,1 +1,1 @@
-# seckill
+# Black Friday Server
